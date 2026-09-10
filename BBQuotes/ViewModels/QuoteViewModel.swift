@@ -34,7 +34,6 @@ public class QuoteViewModel {
         let characterData = try! Data(contentsOf: Bundle.main.url(
                 forResource: "samplecharacter", withExtension: "json")!)
         character = try! decoder.decode(Character.self, from: characterData)
-        print(character.portrayedBy)
     }
     
     public func getData(for show: String) async {

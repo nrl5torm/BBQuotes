@@ -64,8 +64,6 @@ struct Fetcher {
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         let deaths = try decoder.decode([Death].self, from: data)
         
-        print([Death].self)
-        
         for death in deaths {
             if death.character == character {
                 return death

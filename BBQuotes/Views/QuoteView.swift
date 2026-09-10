@@ -20,7 +20,10 @@ struct QuoteView: View {
                     .frame(width: gr.size.width, height: gr.size.height)
                     
                 VStack {
-                    Text("\"\(vm.quote.quote)\"")
+                    Spacer(minLength: 70)
+                    
+                    Text(vm.quote.quote)
+                        .minimumScaleFactor(0.5)
                         .multilineTextAlignment(.center)
                         .foregroundStyle(.white)
                         .padding()
@@ -29,6 +32,7 @@ struct QuoteView: View {
                         .padding(.horizontal)
                     
                     ZStack(alignment: .bottom) {
+                        // TODO randomly select any of the available images
                         AsyncImage(url: vm.character.images[0]) { image in
                             image
                                 .resizable()
@@ -47,6 +51,23 @@ struct QuoteView: View {
                     .frame(width: gr.size.width * 0.9, height: gr.size.height * 0.55)
                     .clipShape(.rect(cornerRadius: 50))
 
+                    Spacer()
+                    
+                    Button() {
+                        Task {
+                            await vm.getData(for: show)
+                        }
+                    } label: {
+                        Text("Get Random Quote")
+                            .font(.title2)
+                            .foregroundStyle(.white)
+                            .padding()
+                            .background(.breakingBadGreen)
+                            .clipShape(.rect(cornerRadius: 25))
+                            .shadow(color: .breakingBadYellow, radius: 10)
+                    }
+                    
+                    Spacer(minLength: 100)
                 }
             }
         }
@@ -56,6 +77,8 @@ struct QuoteView: View {
 }
 
 #Preview {
-    QuoteView(show: "Breaking Bad")
+    QuoteView(
+        show: "Breaking Bad")
+//        show: "Better Call Saul")
         .preferredColorScheme(.dark)
 }
