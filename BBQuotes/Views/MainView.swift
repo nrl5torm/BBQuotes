@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  MainView.swift
 //  BBQuotes
 //
 //  Created by Olivier Sbg on 07/09/2026.
@@ -7,21 +7,22 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct MainView: View {
     var body: some View {
         TabView {
             Tab("Breaking Bad", systemImage: "flask") {
-                Text("Breaking Bad stuff")
+                QuoteView(show: "Breaking Bad")
 //                    .toolbarBackgroundVisibility(.visible, for: .tabBar)
             }
             
             Tab("Better Call Saul", systemImage: "briefcase") {
-                Text("Better Call Saul stuff")
+                QuoteView(show: "Better Call Saul")
             }
-        }
+            
+        }.preferredColorScheme(.dark)
     }
 }
 
 #Preview {
-    ContentView()
+    MainView()
 }
