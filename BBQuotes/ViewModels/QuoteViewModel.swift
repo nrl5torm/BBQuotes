@@ -14,7 +14,7 @@ public class QuoteViewModel {
         case notStarted
         case fetching
         case success
-        case failed(withError: Error)
+        case failed(error: Error)
     }
     
     private(set) var status: FetchStatus = .notStarted
@@ -47,7 +47,7 @@ public class QuoteViewModel {
             
             status = .success
         } catch {
-            status = .failed(withError: error)
+            status = .failed(error: error)
         }
     }
 }

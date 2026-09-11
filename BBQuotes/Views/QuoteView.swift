@@ -20,38 +20,54 @@ struct QuoteView: View {
                     .frame(width: gr.size.width, height: gr.size.height)
                     
                 VStack {
-                    Spacer(minLength: 70)
-                    
-                    Text(vm.quote.quote)
-                        .minimumScaleFactor(0.5)
-                        .multilineTextAlignment(.center)
-                        .foregroundStyle(.white)
-                        .padding()
-                        .background(.black.opacity(0.5))
-                        .clipShape(.rect(cornerRadius:  25))
-                        .padding(.horizontal)
-                    
-                    ZStack(alignment: .bottom) {
-                        // TODO randomly select any of the available images
-                        AsyncImage(url: vm.character.images[0]) { image in
-                            image
-                                .resizable()
-                                .scaledToFill()
-                        } placeholder: {
+                    VStack {
+                        Spacer(minLength: 70)
+                        
+                        switch vm.status {
+                        case .notStarted:
+                            EmptyView()
+                            
+                        case .fetching:
                             ProgressView()
+                                .scaleEffect(4.0)
+                            
+                        case .success:
+                            Text(vm.quote.quote)
+                                .minimumScaleFactor(0.5)
+                                .multilineTextAlignment(.center)
+                                .foregroundStyle(.white)
+                                .padding()
+                                .background(.black.opacity(0.5))
+                                .clipShape(.rect(cornerRadius:  25))
+                                .padding(.horizontal)
+                            
+                            ZStack(alignment: .bottom) {
+                                // TODO randomly select any of the available images
+                                AsyncImage(url: vm.character.images[0]) { image in
+                                    image
+                                        .resizable()
+                                        .scaledToFill()
+                                } placeholder: {
+                                    ProgressView()
+                                        .scaleEffect(2.0)
+                                }
+                                .frame(width: gr.size.width * 0.9, height: gr.size.height * 0.55)
+                                
+                                Text(vm.character.name)
+                                    .foregroundStyle(.white)
+                                    .padding(10)
+                                    .frame(maxWidth: .infinity)
+                                    .background(.ultraThinMaterial)
+                            }
+                            .frame(width: gr.size.width * 0.9, height: gr.size.height * 0.55)
+                            .clipShape(.rect(cornerRadius: 50))
+                            
+                        case .failed(let error):
+                            Text(error.localizedDescription)
                         }
-                        .frame(width: gr.size.width * 0.9, height: gr.size.height * 0.55)
-
-                        Text(vm.character.name)
-                            .foregroundStyle(.white)
-                            .padding(10)
-                            .frame(maxWidth: .infinity)
-                            .background(.ultraThinMaterial)
+                        
+                        Spacer()
                     }
-                    .frame(width: gr.size.width * 0.9, height: gr.size.height * 0.55)
-                    .clipShape(.rect(cornerRadius: 50))
-
-                    Spacer()
                     
                     Button() {
                         Task {
@@ -60,11 +76,12 @@ struct QuoteView: View {
                     } label: {
                         Text("Get Random Quote")
                             .font(.title2)
-                            .foregroundStyle(.white)
+                            .bold()
+                            .foregroundStyle(Color("\(show.replacingOccurrences(of: " ", with: ""))Primary"))
                             .padding()
-                            .background(.breakingBadGreen)
+                            .background(Color("\(show.replacingOccurrences(of: " ", with: ""))Secondary"))
                             .clipShape(.rect(cornerRadius: 25))
-                            .shadow(color: .breakingBadYellow, radius: 10)
+                            .shadow(color: Color("\(show.replacingOccurrences(of: " ", with: ""))Secondary"), radius: 10)
                     }
                     
                     Spacer(minLength: 100)
