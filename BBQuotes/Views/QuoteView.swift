@@ -11,6 +11,8 @@ struct QuoteView: View {
     let vm = QuoteViewModel()
     let show: String
     
+    @State var isShowingCharacterInfo = false
+    
     var body: some View {
         GeometryReader { gr in
             ZStack {
@@ -32,18 +34,26 @@ struct QuoteView: View {
                                 .scaleEffect(4.0)
                             
                         case .success:
-                            Text(vm.quote.quote)
-                                .minimumScaleFactor(0.5)
-                                .multilineTextAlignment(.center)
-                                .foregroundStyle(.white)
-                                .padding()
-                                .background(.black.opacity(0.5))
-                                .clipShape(.rect(cornerRadius:  25))
-                                .padding(.horizontal)
+                            HStack(alignment: .top) {
+                                Text("‟")
+                                    .font(.system(size: 48))
+                                    .padding(.leading)
+                                
+                                Text(vm.quote.quote)
+                                    .minimumScaleFactor(0.5)
+                                    .multilineTextAlignment(.center)
+                                    .foregroundStyle(.white)
+                                    .padding()
+                                    .background(.black.opacity(0.5))
+                                    .clipShape(.rect(cornerRadius:  25))
+                                
+                                Text("ˮ")
+                                    .font(.system(size: 48))
+                                    .padding(.trailing)
+                            }
                             
                             ZStack(alignment: .bottom) {
-                                // TODO randomly select any of the available images
-                                AsyncImage(url: vm.character.images[0]) { image in
+                                AsyncImage(url: vm.character.images.randomElement()) { image in
                                     image
                                         .resizable()
                                         .scaledToFill()
@@ -61,6 +71,9 @@ struct QuoteView: View {
                             }
                             .frame(width: gr.size.width * 0.9, height: gr.size.height * 0.55)
                             .clipShape(.rect(cornerRadius: 50))
+                            .onTapGesture {
+                                isShowingCharacterInfo.toggle()
+                            }
                             
                         case .failed(let error):
                             Text(error.localizedDescription)
@@ -89,6 +102,9 @@ struct QuoteView: View {
             }
         }
         .ignoresSafeArea()
+        .sheet(isPresented: $isShowingCharacterInfo) {
+            CharacterView(character: vm.character, show: show)
+        }
 
     }
 }
