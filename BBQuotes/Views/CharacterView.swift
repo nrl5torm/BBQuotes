@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Foundation
 
 struct CharacterView: View {
     let character: Character
@@ -68,10 +69,38 @@ struct CharacterView: View {
                             }
                         }
                         
-                        Text(character.status)
-                            .padding(.top)
+                        DisclosureGroup("Status (spoiler alert):") {
+                            VStack(alignment: .leading) {
+                                
+                                Text(character.status)
+                                    .bold()
+                                
+                                if let death = character.death {
+                                    AsyncImage(url: death.image) { image in
+                                        image
+                                            .resizable()
+                                            .scaledToFit()
+                                            .clipShape(.rect(cornerRadius: 15))
+                                    } placeholder: {
+                                        ProgressView()
+                                    }
+                                    
+                                    Text("How:")
+                                        .padding(.top)
+                                    Text(death.details)
+                                    
+                                    Text("Last words:")
+                                        .padding(.top)
+                                    Text("\"\(death.lastWords)\"")
+                                }
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .padding(.top)
+                        .tint(.primary)
                     }
                     .frame(width: g.size.width * 0.75, alignment: .leading)
+                    .padding(.bottom, 50)
                 }
                 .scrollIndicators(.hidden)
             }
