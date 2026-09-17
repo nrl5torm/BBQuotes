@@ -9,11 +9,12 @@ import Foundation
 
 @Observable
 @MainActor
-public class QuoteViewModel {
+public class ViewModel {
     enum FetchStatus {
         case notStarted
         case fetching
-        case success
+        case quoteFetched
+        case episodeFetched
         case failed(error: Error)
     }
     
@@ -22,6 +23,7 @@ public class QuoteViewModel {
     
     var quote: Quote
     var character: Character
+    var episode: Episode
     
     init() {
         let decoder = JSONDecoder()
@@ -33,10 +35,16 @@ public class QuoteViewModel {
         
         let characterData = try! Data(contentsOf: Bundle.main.url(
                 forResource: "samplecharacter", withExtension: "json")!)
+        
         character = try! decoder.decode(Character.self, from: characterData)
+        
+        let episodeData = try! Data(contentsOf: Bundle.main.url(
+            forResource: "sampleepisode", withExtension: "json")!)
+        
+        episode = try! decoder.decode(Episode.self, from: episodeData)
     }
     
-    public func getData(for show: String) async {
+    public func getQuote(for show: String) async {
         status = .fetching
         
         do {
@@ -45,7 +53,22 @@ public class QuoteViewModel {
             character = try await fetcher.fetchCharacter(quote.character)
             character.death = try await fetcher.fetchDeath(for: character.name)
             
-            status = .success
+            status = .quoteFetched
+        } catch {
+            status = .failed(error: error)
+        }
+    }
+    
+    // UGLY todo move to separate view model
+    public func getEpisode(for show: String) async {
+        status = .fetching
+        
+        do {
+            if let unwrapped = try await fetcher.fetchEpisode(from: show) {
+                episode = unwrapped
+            }
+            status = .episodeFetched
+            
         } catch {
             status = .failed(error: error)
         }

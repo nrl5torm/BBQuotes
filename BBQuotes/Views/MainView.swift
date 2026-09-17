@@ -11,15 +11,15 @@ struct MainView: View {
     var body: some View {
         TabView {
             Tab(Constants.breakingBad, systemImage: "flask") {
-                QuoteView(show: Constants.breakingBad)
+                ShowView(show: Constants.breakingBad)
             }
             
             Tab(Constants.betterCaulSaul, systemImage: "briefcase") {
-                QuoteView(show: Constants.betterCaulSaul)
+                ShowView(show: Constants.betterCaulSaul)
             }
             
-            Tab(Constants.elCamino, systemImage: "car") {
-                QuoteView(show: Constants.elCamino)
+            Tab(Constants.elCamino, systemImage: "car.rear.road.lane.dashed") {
+                ShowView(show: Constants.elCamino)
             }
             
         }.preferredColorScheme(.dark)

@@ -126,7 +126,7 @@ struct CharacterView: View {
 }
 
 #Preview {
-    CharacterView(character: QuoteViewModel().character,
+    CharacterView(character: ViewModel().character,
                   show: Constants.breakingBad)
         .preferredColorScheme(.dark)
 
