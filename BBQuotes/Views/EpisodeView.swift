@@ -33,7 +33,8 @@ struct EpisodeView: View {
             Text(episode.synopsis)
                 .font(.headline)
                 .minimumScaleFactor(0.5)
-                .padding(.bottom)
+            
+            Divider()
             
             Text("Written by \(episode.writtenBy)")
             

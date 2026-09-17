@@ -91,13 +91,16 @@ struct ShowView: View {
                         Spacer()
                     }
                     
-                    Spacer(minLength: 100)
+                    Spacer(minLength: 110)
                 }
             }
         }
         .ignoresSafeArea()
         .sheet(isPresented: $isShowingCharacterInfo) {
             CharacterView(character: vm.character, show: show)
+        }
+        .task {
+            await vm.getQuote(for: show)
         }
 
     }
