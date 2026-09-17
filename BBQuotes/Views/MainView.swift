@@ -19,6 +19,10 @@ struct MainView: View {
                 QuoteView(show: "Better Call Saul")
             }
             
+            Tab("El Camino", systemImage: "car") {
+                QuoteView(show: "El Camino")
+            }
+            
         }.preferredColorScheme(.dark)
     }
 }
