@@ -10,17 +10,16 @@ import SwiftUI
 struct MainView: View {
     var body: some View {
         TabView {
-            Tab("Breaking Bad", systemImage: "flask") {
-                QuoteView(show: "Breaking Bad")
-//                    .toolbarBackgroundVisibility(.visible, for: .tabBar)
+            Tab(Constants.breakingBad, systemImage: "flask") {
+                QuoteView(show: Constants.breakingBad)
             }
             
-            Tab("Better Call Saul", systemImage: "briefcase") {
-                QuoteView(show: "Better Call Saul")
+            Tab(Constants.betterCaulSaul, systemImage: "briefcase") {
+                QuoteView(show: Constants.betterCaulSaul)
             }
             
-            Tab("El Camino", systemImage: "car") {
-                QuoteView(show: "El Camino")
+            Tab(Constants.elCamino, systemImage: "car") {
+                QuoteView(show: Constants.elCamino)
             }
             
         }.preferredColorScheme(.dark)

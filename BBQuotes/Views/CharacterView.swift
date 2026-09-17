@@ -11,13 +11,15 @@ import Foundation
 struct CharacterView: View {
     let character: Character
     let show: String
+    
+    @Namespace var infoStackId
 
     var body: some View {
         GeometryReader { g in
             ScrollViewReader { sv in
                 
                 ZStack(alignment: .top) {
-                    Image(show.lowercased().replacingOccurrences(of: " ", with: ""))
+                    Image(show.withoutCaseOrSpaces())
                         .resizable()
                         .scaledToFit()
                     
@@ -90,7 +92,7 @@ struct CharacterView: View {
                                                 .clipShape(.rect(cornerRadius: 15))
                                                 .onAppear {
                                                     withAnimation {
-                                                        sv.scrollTo(1, anchor: .bottom)
+                                                        sv.scrollTo(infoStackId, anchor: .bottom)
                                                     }
                                                 }
                                         } placeholder: {
@@ -113,7 +115,7 @@ struct CharacterView: View {
                         }
                         .frame(width: g.size.width * 0.75, alignment: .leading)
                         .padding(.bottom, 50)
-                        .id(1)
+                        .id(infoStackId)
                     }
                     .scrollIndicators(.hidden)
                 }
@@ -124,7 +126,8 @@ struct CharacterView: View {
 }
 
 #Preview {
-    CharacterView(character: QuoteViewModel().character, show: "Breaking Bad")
+    CharacterView(character: QuoteViewModel().character,
+                  show: Constants.breakingBad)
         .preferredColorScheme(.dark)
 
 }

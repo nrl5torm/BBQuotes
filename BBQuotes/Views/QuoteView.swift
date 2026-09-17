@@ -16,7 +16,7 @@ struct QuoteView: View {
     var body: some View {
         GeometryReader { gr in
             ZStack {
-                Image(show.lowercased().replacingOccurrences(of: " ", with: ""))
+                Image(show.withoutCaseOrSpaces())
                     .resizable()
                     .scaledToFill()
                     .frame(width: gr.size.width, height: gr.size.height)
@@ -90,11 +90,11 @@ struct QuoteView: View {
                         Text("Get Random Quote")
                             .font(.title2)
                             .bold()
-                            .foregroundStyle(Color("\(show.replacingOccurrences(of: " ", with: ""))Primary"))
+                            .foregroundStyle(Color("\(show.withoutSpaces())Primary"))
                             .padding()
-                            .background(Color("\(show.replacingOccurrences(of: " ", with: ""))Secondary"))
+                            .background(Color("\(show.withoutSpaces())Secondary"))
                             .clipShape(.rect(cornerRadius: 25))
-                            .shadow(color: Color("\(show.replacingOccurrences(of: " ", with: ""))Secondary"), radius: 10)
+                            .shadow(color: Color("\(show.withoutSpaces())Secondary"), radius: 10)
                     }
                     
                     Spacer(minLength: 100)
@@ -111,7 +111,6 @@ struct QuoteView: View {
 
 #Preview {
     QuoteView(
-        show: "Breaking Bad")
-//        show: "Better Call Saul")
+        show: Constants.breakingBad)
         .preferredColorScheme(.dark)
 }
