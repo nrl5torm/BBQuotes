@@ -7,14 +7,15 @@
 
 import Foundation
 
-struct Fetcher {
-    private enum FetchError: Error {
-        case badResponse
+class Fetcher {
+    private enum FetchError: Int, Error {
+        case badResponse = 99
     }
     
     private let baseApiURL = URL(string: "https://breaking-bad-api-six.vercel.app/api")!
+    private var useQuoteApi = false
     
-    public func fetchQuote(from show: String) async throws -> Quote {
+    private func fetchApiQuote(from show: String) async throws -> Quote {
         // build URL
         let quoteURL = baseApiURL.appending(path: "quotes/random")
             .appending(queryItems: [URLQueryItem(name: "production", value: show)])
@@ -33,12 +34,39 @@ struct Fetcher {
         return quote
     }
     
-    public func fetchCharacter(_ name: String) async throws -> Character {
+    private func fetchLocalBBQuote() async throws -> Quote {
+        //TODO store results (also for images and characters!)
+        let quotesData = try! Data(contentsOf: Bundle.main.url(
+            forResource: "bbquotes", withExtension: "json")!)
+        let quotes = try JSONDecoder().decode([Quote].self, from: quotesData)
+        
+        return quotes.randomElement()!
+    }
+    
+    public func fetchQuote(from show: String) async throws -> Quote {
+        if show == Constants.breakingBad {
+            useQuoteApi.toggle()
+        } else {
+            useQuoteApi = true
+        }
+        
+        if useQuoteApi {
+            return try await fetchApiQuote(from: show)
+        }
+        return try await fetchLocalBBQuote()
+    }
+    
+    public func fetchCharacter(_ name: String) async throws -> Character? {
         let characterURL = baseApiURL.appending(path: "characters")
             .appending(queryItems: [URLQueryItem(name: "name", value: name)])
         
         let (data, response) = try await URLSession.shared.data(from: characterURL)
         guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+            if let unwrapped = response as? HTTPURLResponse {
+                if unwrapped.statusCode == 404 {
+                    return nil
+                }
+            }
             throw FetchError.badResponse
         }
         
@@ -49,6 +77,7 @@ struct Fetcher {
         guard characters.count == 1 else {
             throw FetchError.badResponse
         }
+ 
         return characters[0]
     }
     

@@ -25,9 +25,9 @@ struct EpisodeView: View {
                     .clipShape(.rect(cornerRadius: 15))
             } placeholder: {
                 ProgressView()
-                    .scaleEffect(2.0)
+                    .scaleEffect(6.0)
             }
-            .frame(maxWidth: .infinity, alignment: .center)
+            .frame(maxWidth: .infinity, minHeight: 200, alignment: .center)
 
             
             Text(episode.synopsis)

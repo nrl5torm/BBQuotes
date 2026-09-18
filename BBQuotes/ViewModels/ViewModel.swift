@@ -50,8 +50,12 @@ public class ViewModel {
         do {
             quote = try await fetcher.fetchQuote(from: show)
             
-            character = try await fetcher.fetchCharacter(quote.character)
-            character.death = try await fetcher.fetchDeath(for: character.name)
+            if let unwrapped = try await fetcher.fetchCharacter(quote.character) {
+                character = unwrapped
+                character.death = try await fetcher.fetchDeath(for: character.name)
+            } else {
+                character = Character(name: quote.character)
+            }
             
             status = .quoteFetched
         } catch {

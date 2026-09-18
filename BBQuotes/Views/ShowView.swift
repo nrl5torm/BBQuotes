@@ -11,8 +11,6 @@ struct ShowView: View {
     let vm = ViewModel()
     let show: String
     
-    @State var isShowingCharacterInfo = false
-    
     var body: some View {
         GeometryReader { g in
             ZStack {
@@ -31,13 +29,10 @@ struct ShowView: View {
                             
                         case .fetching:
                             ProgressView()
-                                .scaleEffect(4.0)
+                                .scaleEffect(6.0)
                             
                         case .quoteFetched:
-                            QuoteView(quote: vm.quote, character: vm.character, geometry: g)
-                            .onTapGesture {
-                                isShowingCharacterInfo.toggle()
-                            }
+                            QuoteView(quote: vm.quote, character: vm.character, show: show, geometry: g)
                             
                         case .episodeFetched:
                             EpisodeView(episode: vm.episode)
@@ -96,9 +91,6 @@ struct ShowView: View {
             }
         }
         .ignoresSafeArea()
-        .sheet(isPresented: $isShowingCharacterInfo) {
-            CharacterView(character: vm.character, show: show)
-        }
         .task {
             await vm.getQuote(for: show)
         }

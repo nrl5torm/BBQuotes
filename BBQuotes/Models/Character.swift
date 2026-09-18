@@ -29,6 +29,17 @@ struct Character: Decodable {
         case portrayedBy
     }
     
+    init(name: String) {
+        self.name = name
+        
+        self.birthday = "Unknown"
+        self.occupations = []
+        self.images = []
+        self.aliases = []
+        self.status = "Unknown"
+        self.portrayedBy = "Unknown"
+    }
+    
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.name = try container.decode(String.self, forKey: .name)
